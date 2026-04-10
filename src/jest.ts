@@ -3,13 +3,21 @@ import jestPlugin from 'eslint-plugin-jest';
 import type { Config } from 'eslint/config';
 
 /**
- * Jest ESLint configuration.
+ * Jest ESLint preset — self-contained.
  *
- * Includes:
- * - Jest plugin rules for test correctness
- * - Test-file specific safety and readability defaults
+ * Provides:
+ * - Jest testing globals (describe, it, expect, etc.).
+ * - Recommended rules for Jest tests.
+ *
+ * Scope: test files matching `*.test.{js,ts,jsx,tsx}` or `*.spec.{js,ts,jsx,tsx}`
+ * or located in `__tests__` directories. Adjust the `files` patterns as needed
+ * to fit your project's test file naming conventions and structure.
+ *
+ * Requires:
+ *   eslint-plugin-jest
  */
-const config = [
+
+const config: Config[] = [
   {
     files: [
       '**/*.{test,spec}.{ts,tsx,js,jsx,mts,cts,mjs,cjs}',
@@ -32,6 +40,6 @@ const config = [
       'jest/prefer-to-have-length': 'warn',
     },
   },
-] as Config[];
+];
 
 export default Object.freeze(config);

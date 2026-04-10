@@ -1,18 +1,22 @@
-import globals from 'globals';
-import js from '@eslint/js';
 import type { Config } from 'eslint/config';
 
+import stylistic from '@stylistic/eslint-plugin';
+import globals from 'globals';
+import js from '@eslint/js';
+
 /**
- * Base ESLint configuration for JavaScript and TypeScript projects.
- * 
- * Includes:
- * - Ignore patterns for common build/dist folders
- * - Base language options and globals
- * - Recommended JS and TS configurations
- * - Core code quality and style rules
- * - Relaxed rules for config files
+ * Base ESLint configuration for all JavaScript and TypeScript files.
+ *
+ * This is the foundation for all other presets. It includes:
+ *   - recommended ESLint rules (no-debugger, no-unused-vars, etc.)
+ *   - global variables for modern environments (browser, node, es2026)
+ *   - parser options for modern JavaScript and JSX
+ *   stylistic rules that apply to all files (quotes, semi, comma-dangle, etc.)
+ *
+ * Scope: all .js / .jsx / .ts / .tsx files. Other presets may narrow this
+ * scope further with their own `files` patterns.
  */
-const config = [
+const config: Config[] = [
   // ========================================
   // IGNORE PATTERNS
   // ========================================
@@ -33,8 +37,8 @@ const config = [
   // BASE CONFIGURATION
   // ========================================
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    languageOptions: { 
+    files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
+    languageOptions: {
       globals: {
         ...globals.es2026,
       },
@@ -49,109 +53,101 @@ const config = [
   },
 
   // ========================================
-  // EXTEND RECOMMENDED CONFIGURATIONS
+  // EXTEND RECOMMENDED CONFIGURATION
+  // Covers: no-debugger, no-unused-vars, no-undef, no-unreachable,
+  // no-fallthrough, constructor-super, no-this-before-super,
+  // no-constant-binary-expression, and more.
   // ========================================
   js.configs.recommended,
-  
+
+
   // ========================================
-  // JAVASCRIPT RULES
+  // STYLISTIC PLUGIN
+  // Replaces the deprecated ESLint core formatting rules.
+  // All rules below live in @stylistic/eslint-plugin and are auto-fixable.
   // ========================================
   {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    files: ['**/*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}'],
+    plugins: { '@stylistic': stylistic },
     rules: {
-      // ==========================================
-      // CODE QUALITY
-      // Detect potential errors and bad practices
-      // ==========================================
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
-      'no-debugger': 'error',
-      'no-alert': 'warn',
-      'prefer-const': 'error',
-      'prefer-arrow-callback': 'error',
-      'prefer-template': 'error',
-      'no-useless-return': 'error',
-      'no-else-return': ['error', { allowElseIf: false }],
-      'no-lonely-if': 'error',
-      'no-unneeded-ternary': 'error',
-      'no-nested-ternary': 'warn',
-      
-      // ==========================================
-      // FORMAT AND STYLE
-      // Keep code uniform across the team
-      // ==========================================
-      'quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: true }],
-      'semi': ['error', 'always'],
-      'comma-dangle': ['error', 'always-multiline'],
-      'object-curly-spacing': ['error', 'always'],
-      'array-bracket-spacing': ['error', 'never'],
-      'arrow-spacing': 'error',
-      'arrow-body-style': ['error', 'as-needed'],
-      'block-spacing': 'error',
-      'comma-spacing': 'error',
-      'key-spacing': 'error',
-      'keyword-spacing': 'error',
-      'space-before-blocks': 'error',
-      'space-infix-ops': 'error',
-      
-      // ==========================================
-      // COMPLEXITY AND MAINTAINABILITY
-      // Prevent hard-to-maintain code
-      // ==========================================
-      'complexity': ['warn', { 'max': 10 }],
-      'max-depth': ['warn', 3],
-      'max-lines-per-function': ['warn', {
-        'max': 75,
-        'skipBlankLines': true,
-        'skipComments': true,
+      // 'quotes': deprecated → @stylistic/quotes
+      // allowTemplateLiterals: false complements prefer-template: backticks are
+      // only allowed when they contain interpolation (`${x}`), never for plain strings.
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true, allowTemplateLiterals: 'never' }],
+
+      // 'semi': deprecated → @stylistic/semi
+      '@stylistic/semi': ['error', 'always'],
+
+      // 'comma-dangle': deprecated → @stylistic/comma-dangle
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+
+      // 'object-curly-spacing': deprecated → @stylistic/object-curly-spacing
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+
+      // 'array-bracket-spacing': deprecated → @stylistic/array-bracket-spacing
+      '@stylistic/array-bracket-spacing': ['error', 'never'],
+
+      // 'arrow-spacing': deprecated → @stylistic/arrow-spacing
+      '@stylistic/arrow-spacing': 'error',
+
+      // 'block-spacing': deprecated → @stylistic/block-spacing
+      '@stylistic/block-spacing': 'error',
+
+      // 'comma-spacing': deprecated → @stylistic/comma-spacing
+      '@stylistic/comma-spacing': 'error',
+
+      // 'key-spacing': deprecated → @stylistic/key-spacing
+      '@stylistic/key-spacing': 'error',
+
+      // 'keyword-spacing': deprecated → @stylistic/keyword-spacing
+      '@stylistic/keyword-spacing': 'error',
+
+      // 'space-before-blocks': deprecated → @stylistic/space-before-blocks
+      '@stylistic/space-before-blocks': 'error',
+
+      // 'space-infix-ops': deprecated → @stylistic/space-infix-ops
+      '@stylistic/space-infix-ops': 'error',
+
+      // Disallow spaces inside parentheses: `if( a )` → `if(a)`
+      '@stylistic/space-in-parens': ['error', 'never'],
+
+      // Space before function parenthesis:
+      //   anonymous:  `function ()` — space to distinguish from a call
+      //   named:      `function foo()` — no space, reads naturally
+      //   asyncArrow: `async () =>` — space is standard
+      '@stylistic/space-before-function-paren': ['error', {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
       }],
-      'max-params': ['warn', 4],
-      'max-statements': ['warn', 15],
-
-      // ==========================================
-      // ADDITIONAL VALIDATIONS
-      // Extra safety for common mistakes
-      // ==========================================
-      'consistent-return': 'error', // tsconfig: noImplicitReturns
-      'constructor-super': 'error', // tsconfig: strict class checks
-      'no-constant-binary-expression': 'error',
-      'no-fallthrough': 'error', // tsconfig: noFallthroughCasesInSwitch
-      'no-labels': 'error', // tsconfig: allowUnusedLabels
-      'no-this-before-super': 'error', // tsconfig: strict class checks
-      'no-unreachable': 'error', // tsconfig: allowUnreachableCode
-      'no-unreachable-loop': 'error', // Extra safety for loops
-      // 'no-unused-vars': tsconfig: noUnusedLocals - enabled by js.configs.recommended
     },
   },
 
   // ========================================
-  // CONFIG FILES - RELAXED RULES
+  // CONFIG FILES — RELAXED RULES
   // ========================================
   {
-    files: ['**/*.config.{js,ts,mjs,mts}'],
+    files: ['**/*.config.{js,mjs,cjs,ts,mts,cts,tsx}'],
     rules: {
-      'no-console': 'off', // Config files often need console for debugging
-      'complexity': 'off', // Config files can be complex with many conditionals
-      'max-lines-per-function': 'off', // Configuration functions can be long
+      'no-console': 'off',
     },
   },
 
   // ========================================
-  // TEST FILES - RELAXED RULES
+  // TEST FILES — RELAXED RULES
   // ========================================
   {
     files: [
-      '**/*.{test,spec}.{ts,tsx,js,jsx}',
-      '**/__tests__/**/*.{ts,tsx,js,jsx}',
+      '**/*.{test,spec}.{js,jsx,ts,tsx}',
+      '**/__tests__/**/*.{js,jsx,ts,tsx}',
     ],
     rules: {
-      'complexity': 'off', // Test functions can be complex
-      'max-depth': 'off', // Deep nesting in test setup is common
-      'max-lines-per-function': 'off', // Test functions can be long
-      'max-params': 'off', // Test utilities often need many params
-      'max-statements': 'off', // Many assertions and setup statements
-      'no-console': 'off', // Console logs are common in tests
+      'no-console': 'off',
+      'no-shadow': 'off',
+      'max-lines-per-function': 'off',
+      'no-unused-vars': 'off',
     },
   },
-] as Config[];
+];
 
 export default Object.freeze(config);
