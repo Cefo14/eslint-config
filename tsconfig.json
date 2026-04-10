@@ -1,0 +1,220 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Cefo14 - Strict Base Configuration",
+  "compilerOptions": {
+    // ==================== PROJECT STRUCTURE ==================== */
+    "rootDir": "./src",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    //* ==================== LANGUAGE & ENVIRONMENT ==================== */
+
+    // target: ESNext - Latest JavaScript features.
+    // Why? Consumers will transpile with their own bundler to their targets.
+    "target": "ESNext",
+
+    // lib: Only ESNext, no DOM.
+    // Why? It's a cross-runtime library, doesn't need browser types.
+    "lib": ["ESNext"],
+
+    // module: ESNext - Modern module system.
+    // Why? Libraries should use ES Modules for better tree-shaking.
+    "module": "ESNext",
+  
+    /* ==================== MODULE RESOLUTION ==================== */
+    
+    // moduleResolution: bundler - Modern resolution for libraries.
+    // Why? Consumers use bundlers that understand this mode.
+    "moduleResolution": "bundler",
+
+    // allowImportingTsExtensions: false - Must use .js in imports.
+    // Why? TypeScript emits .js files, imports must reference .js even from .ts.
+    // Example: import { foo } from './utils.js' (even though file is utils.ts)
+    // This is required for ESM compatibility - Node.js requires explicit extensions.
+    "allowImportingTsExtensions": false,
+
+    // verbatimmodulesyntax: true - Enforces 'import type' for types.
+    // Why? Cleaner exports, better tree-shaking for consumers.
+    "verbatimModuleSyntax": true,
+
+    // erasableSyntaxOnly: true - Only allows erasable TypeScript syntax.
+    // Why? Prevents const enums, namespaces. Cleaner library code.
+    "erasableSyntaxOnly": true,
+
+    /* ==================== OUTPUT (EMIT) ====================  */
+
+    // noEmit: false - For libraries, we DO emit code.
+    // Why? It's a publishable library, we need to generate the code.
+    "noEmit": false,
+
+    // outDir: dist - Output directory for compiled files.
+    // Why? Standard convention for published packages.
+    // Override if needed: "outDir": "./lib" in your tsconfig.json
+    "outDir": "./dist",
+
+    // declaration: true - Generates .d.ts for TypeScript users.
+    // Why? ESSENTIAL for libraries. Provides intellisense.
+    "declaration": true,
+
+    // declarationMap: true - Source maps for types.
+    // Why? Enables jump-to-definition to original .ts source.
+    "declarationMap": true,
+
+    // sourceMap: true - Source maps for debugging.
+    // Why? Helps library consumers debug issues in their projects.
+    "sourceMap": true,
+
+    // removeComments: false - Preserves JSDoc in .d.ts files.
+    // Why? CRITICAL for IntelliSense. removeComments: true would strip JSDoc from .d.ts.
+    // The .js size doesn't matter - consumers will bundle/minify anyway.
+    "removeComments": false,
+
+    /* ==================== EMIT OPTIMIZATIONS ==================== */
+    // Performance and output optimizations.
+
+    // useDefineForClassFields: true - Uses modern class fields semantics (ES2022).
+    // Why? Standard JS behavior, better performance, less overhead.
+    // Fields are defined with Object.defineProperty instead of set in constructor.
+    "useDefineForClassFields": true,
+
+    // importHelpers: false by default to avoid forcing dependencies.
+    // Why? Shares helpers instead of duplicating in each file.
+    // Set to true + install tslib (pnpm add tslib) to reduce bundle size.
+    // Useful if your code uses async/await, spread, class inheritance, etc.
+    "importHelpers": false,
+
+    // newLine: lf - Line ending consistency.
+    // Why? Consistent line endings across environments.
+    "newLine": "lf",
+  
+    /* ==================== PERFORMANCE ==================== */
+    // Universal performance optimizations.
+
+    // skipLibCheck: true - Doesn't check types in .d.ts files in node_modules.
+    // Why? Dramatically improves compilation speed (up to 50%).
+    // External types should already be validated by their maintainers.
+    "skipLibCheck": true,
+
+    // incremental: true - Enables incremental compilation.
+    // Why? Saves information from previous compilation, 3-5x faster re-compilation.
+    // Essential for large projects and during development.
+    "incremental": false,
+
+    // tsBuildInfoFile: path to cache - Defines where to save incremental cache.
+    // Why? We save it in node_modules/.cache so it doesn't clutter the project.
+    // Git ignores it automatically if node_modules is in .gitignore.
+    //"tsBuildInfoFile": "./node_modules/.cache/tsconfig.tsbuildinfo",
+
+    /* ==================== MODULE SYSTEM ==================== */
+    // Universal module system settings for all environments.
+
+    // moduleDetection: force - Treats all files as modules (not scripts).
+    // Why? Prevents "cannot redeclare block-scoped variable" error.
+    // All files have their own scope.
+    "moduleDetection": "force",
+
+    // resolveJsonModule: true - Allows importing .json files.
+    // Why? Useful for package.json, configs, i18n, static data.
+    // Includes types and compile-time validation.
+    "resolveJsonModule": true,
+
+    // isolatedModules: true - Ensures each file can be transpiled independently.
+    // Why? REQUIRED for bundlers like esbuild, Vite, swc that don't do full type-checking.
+    // Prevents patterns that can't be transpiled in isolation.
+    "isolatedModules": true,
+
+    /* ==================== INTEROP CONSTRAINTS ==================== */
+    // Compatibility with CommonJS and ES Modules interop.
+
+    // esModuleInterop: true - Enables CommonJS interoperability.
+    // Why? Allows import React from "react" instead of import * as React.
+    // Adds helpers for default imports in CJS modules.
+    "esModuleInterop": true,
+
+    // allowSyntheticDefaultImports: true - Allows default imports in modules without export default.
+    // Why? Improves DX with libraries that don't have explicit export default.
+    // Already implicit with esModuleInterop, but we make it explicit.
+    "allowSyntheticDefaultImports": true,
+
+    // forceConsistentCasingInFileNames: true - Enforces case-sensitivity in imports.
+    // Why? Prevents bugs between Windows (case-insensitive) and Linux/Mac (case-sensitive).
+    // import './File' must match exactly with 'File.ts', not 'file.ts'.
+    "forceConsistentCasingInFileNames": true,
+
+    /* ==================== TYPE CHECKING (STRICT MODE) ==================== */
+    // Strong type-checking options to catch potential bugs early.
+
+    // strict: true - Enables ALL strict options (the golden rule).
+    // Why? Enables a comprehensive set of type-checking rules:
+    // - alwaysStrict
+    // - strictNullChecks
+    // - strictBindCallApply
+    // - strictBuiltinIteratorReturn
+    // - strictFunctionTypes
+    // - strictPropertyInitialization
+    // - noImplicitAny
+    // - noImplicitThis
+    // - useUnknownInCatchVariables
+    "strict": true,
+
+    // noUnusedLocals: true - Error if there are unused local variables.
+    // Why? Cleaner code, detects dead code, reduces bundle size.
+    // Helps identify incomplete refactors.
+    "noUnusedLocals": true,
+
+    // noUnusedParameters: true - Error if there are unused function parameters.
+    // Why? Indicates possible logic error or unnecessary code.
+    // If you really don't need the param, prefix with _ (e.g., _unused).
+    "noUnusedParameters": true,
+
+    // noFallthroughCasesInSwitch: true - Error if a case doesn't have break/return.
+    // Why? Fallthrough is a common source of hard-to-detect bugs.
+    // If you really need it, add an explicit comment.
+    "noFallthroughCasesInSwitch": true,
+
+    // noImplicitOverride: true - Requires 'override' keyword in overriding methods.
+    // Why? Prevents bugs when refactoring the base class.
+    // Makes explicit which methods are overrides.
+    "noImplicitOverride": true,
+
+    // noUncheckedSideEffectImports: true - Error on imports that only execute code.
+    // Why? Side-effects must be explicit for better tree-shaking.
+    // Forces documenting imports that have side effects.
+    "noUncheckedSideEffectImports": true,
+
+    /* ==================== EXTRA STRICTNESS ==================== */
+    // Additional strict options that are disabled by default for compatibility.
+    
+    // noUncheckedIndexedAccess: false - (DISABLED by default, see above)
+    // What it does: Makes array[i] return T | undefined, forcing null-checks.
+    // To enable: Add "noUncheckedIndexedAccess": true in your tsconfig 
+    "noUncheckedIndexedAccess": false,
+
+    // exactOptionalPropertyTypes: false - (DISABLED by default, see above)
+    // What it does: { prop?: string } rejects { prop: undefined }, only accepts { } or { prop: "value" }
+    // To enable: Add "exactOptionalPropertyTypes": true in your tsconfig
+    "exactOptionalPropertyTypes": false,
+
+    // noPropertyAccessFromIndexSignature: false - (DISABLED by default, see above)
+    // What it does: Forces obj["key"] instead of obj.key for index signature properties
+    // To enable: Add "noPropertyAccessFromIndexSignature": true in your tsconfig
+    "noPropertyAccessFromIndexSignature": false,
+
+    // allowUnusedLabels: false - Error if there are unused labels.
+    // Why? Labels are very rare in modern JS, probably an error.
+    "allowUnusedLabels": false,
+
+    // allowUnreachableCode: false - Error if there's unreachable code.
+    // Why? Code after return/throw is dead code, indicates a bug.
+    "allowUnreachableCode": false,
+
+    // noImplicitReturns: true - Error if not all paths in a function return a value.
+    // Why? Prevents cases where you forgot a return, getting unexpected undefined.
+    "noImplicitReturns": true
+  },
+  "exclude": [
+    "dist",
+    "commitlint.config.mts",
+    "lint-staged.config.mts"
+  ]
+}

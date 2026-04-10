@@ -1,0 +1,96 @@
+{
+  "name": "@cefo14/eslint-config",
+  "version": "1.0.0",
+  "description": "Opinionated ESLint Flat Config presets for JavaScript, TypeScript, React, Node.js, and Jest.",
+  "keywords": [
+    "eslint",
+    "eslint-config",
+    "eslintconfig",
+    "config",
+    "typescript",
+    "react",
+    "javascript",
+    "nodejs",
+    "linting",
+    "code-quality",
+    "best-practices"
+  ],
+  "homepage": "https://github.com/Cefo14/eslint-config/tree/main/packages/eslint-config#readme",
+  "bugs": {
+    "url": "https://github.com/Cefo14/eslint-config/issues"
+  },
+  "author": "Cefo14",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cefo14/eslint-config.git",
+    "directory": "packages/eslint-config"
+  },
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./base": {
+      "import": "./dist/base.js",
+      "types": "./dist/base.d.ts"
+    },
+    "./typescript": {
+      "import": "./dist/typescript.js",
+      "types": "./dist/typescript.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    },
+    "./node": {
+      "import": "./dist/node.js",
+      "types": "./dist/node.d.ts"
+    },
+    "./jest": {
+      "import": "./dist/jest.js",
+      "types": "./dist/jest.d.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "clean": "node -e \"fs.rmSync('dist', { recursive: true, force: true })\"",
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "lint": "eslint .",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "eslint": ">=10.2.0"
+  },
+  "dependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/eslint": "9.6.1",
+    "@types/eslint-plugin-jsx-a11y": "6.10.1",
+    "@types/node": "25.5.2",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "eslint-plugin-jest": "29.0.1",
+    "eslint-plugin-react": "7.37.5",
+    "eslint-plugin-react-hooks": "7.0.1",
+    "globals": "17.4.0",
+    "typescript": "6.0.2",
+    "typescript-eslint": "8.58.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "20.5.0",
+    "@commitlint/config-conventional": "20.5.0",
+    "@commitlint/types": "20.5.0",
+    "husky": "9.1.7",
+    "lint-staged": "16.4.0"
+  }
+}
