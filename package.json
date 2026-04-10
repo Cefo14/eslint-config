@@ -68,7 +68,9 @@
     "build": "tsc",
     "lint": "eslint .",
     "dev": "tsc --watch",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run"
   },
   "peerDependencies": {
     "eslint": ">=10.2.0"
@@ -78,8 +80,8 @@
     "@types/eslint": "9.6.1",
     "@types/eslint-plugin-jsx-a11y": "6.10.1",
     "@types/node": "25.5.2",
-    "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-jest": "29.0.1",
+    "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "7.0.1",
     "globals": "17.4.0",
@@ -90,7 +92,14 @@
     "@commitlint/cli": "20.5.0",
     "@commitlint/config-conventional": "20.5.0",
     "@commitlint/types": "20.5.0",
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "13.0.1",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "12.0.6",
+    "@semantic-release/npm": "13.1.5",
+    "@semantic-release/release-notes-generator": "14.1.0",
     "husky": "9.1.7",
-    "lint-staged": "16.4.0"
+    "lint-staged": "16.4.0",
+    "semantic-release": "25.0.3"
   }
 }

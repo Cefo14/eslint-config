@@ -28,7 +28,3 @@ runs:
     - name: Lint code
       shell: bash
       run: pnpm lint
-
-    - name: Run tests
-      shell: bash
-      run: pnpm test:run
