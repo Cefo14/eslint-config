@@ -3,7 +3,7 @@
   "display": "Cefo14 - Strict Base Configuration",
   "compilerOptions": {
     // ==================== PROJECT STRUCTURE ==================== */
-    "rootDir": "./src",
+    "rootDir": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
@@ -27,11 +27,13 @@
     // Why? Consumers use bundlers that understand this mode.
     "moduleResolution": "bundler",
 
-    // allowImportingTsExtensions: false - Must use .js in imports.
-    // Why? TypeScript emits .js files, imports must reference .js even from .ts.
-    // Example: import { foo } from './utils.js' (even though file is utils.ts)
-    // This is required for ESM compatibility - Node.js requires explicit extensions.
+    // allowImportingTsExtensions: false - Prevents .ts extension imports in source.
+    // Why? We emit JavaScript, so runtime imports must target .js files.
     "allowImportingTsExtensions": false,
+
+    // resolvePackageJsonExports: true - Respects "exports" field in package.json.
+    // Why? Ensures correct entry points are used, better compatibility.
+    "emitDeclarationOnly": false,
 
     // verbatimmodulesyntax: true - Enforces 'import type' for types.
     // Why? Cleaner exports, better tree-shaking for consumers.
@@ -212,9 +214,13 @@
     // Why? Prevents cases where you forgot a return, getting unexpected undefined.
     "noImplicitReturns": true
   },
+  "include": [
+    "src/**/*.ts",
+    "eslint.config.mts",
+    "commitlint.config.mts",
+    "lint-staged.config.mts",
+  ],
   "exclude": [
     "dist",
-    "commitlint.config.mts",
-    "lint-staged.config.mts"
   ]
 }
