@@ -26,15 +26,26 @@ This package uses [ESLint's Flat Config](https://eslint.org/docs/latest/use/conf
 
 The presets are designed to be composed. `base` is always required, and you add the rest depending on your project's needs.
 
+All presets can be imported individually or from the main entry point:
+
+```js
+// individually
+import base from '@cefo14/eslint-config/base';
+import react from '@cefo14/eslint-config/react';
+
+// or from the main entry point
+import { base, react } from '@cefo14/eslint-config';
+```
+
 ### Available presets
 
 | Import path | Description |
 |---|---|
 | `@cefo14/eslint-config/base` | **Always required.** Shared foundational rules used by all other presets. |
-| `@cefo14/eslint-config/javascript` | Rules for JavaScript projects. |
-| `@cefo14/eslint-config/typescript` | Rules for TypeScript projects (uses `typescript-eslint`). |
+| `@cefo14/eslint-config/javascript` | Rules for JavaScript projects. Mutually exclusive with `typescript`. |
+| `@cefo14/eslint-config/typescript` | Rules for TypeScript projects (uses `typescript-eslint`). Mutually exclusive with `javascript`. |
 | `@cefo14/eslint-config/react` | Rules for React projects, including hooks and accessibility (`jsx-a11y`). |
-| `@cefo14/eslint-config/browser` | Globals and rules for browser environments. |
+| `@cefo14/eslint-config/browser` | Globals and rules for browser environments (React, vanilla JS, etc.). |
 | `@cefo14/eslint-config/node` | Rules for Node.js projects (uses `eslint-plugin-n`). |
 | `@cefo14/eslint-config/jest` | Rules for Jest test files (uses `eslint-plugin-jest`). |
 
@@ -81,17 +92,32 @@ export default [
 ];
 ```
 
-### Node.js project
+### Node.js + JavaScript project
 
 ```js
 // eslint.config.mjs
 import base       from '@cefo14/eslint-config/base';
-import javascript from '@cefo14/eslint-config/javascript'; // or typescript
+import javascript from '@cefo14/eslint-config/javascript';
 import node       from '@cefo14/eslint-config/node';
 
 export default [
   ...base,
   ...javascript,
+  ...node,
+];
+```
+
+### Node.js + TypeScript project
+
+```js
+// eslint.config.mjs
+import base       from '@cefo14/eslint-config/base';
+import typescript from '@cefo14/eslint-config/typescript';
+import node       from '@cefo14/eslint-config/node';
+
+export default [
+  ...base,
+  ...typescript,
   ...node,
 ];
 ```
